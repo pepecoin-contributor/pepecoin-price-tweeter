@@ -1,6 +1,7 @@
 # bitcoin-price-twitter-bot
 Bitcoin Price Twitter Bot
 ---
+Cloned from: https://github.com/alemesa/bitcoin-price-twitter-bot
 
 * Tweets every day at 8:00am UTC
 
