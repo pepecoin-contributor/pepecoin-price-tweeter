@@ -12,27 +12,17 @@ var Bot = new TwitterBot({
 
 // Function that builds and tweets the message
 function runBot() {
-  fetch('https://api.coinmarketcap.com/v1/ticker/bitcoin/')
-    .then(resp => resp.json())
-    .then(text => text[0])
-    .then(
-      info => `Bitcoin Price: $${info.price_usd} [USD]
-1hr - change: ${info.percent_change_1h > 0
-        ? info.percent_change_1h + '% 📈'
-        : info.percent_change_1h + '% 📉'}
-1day - trend: ${info.percent_change_24h > 0
-        ? info.percent_change_24h + '% 📈'
-        : info.percent_change_24h + '% 📉'}
-1week - trend: ${info.percent_change_7d > 0
-        ? info.percent_change_7d + '% 📈'
-        : info.percent_change_7d + '% 📉'}
-Remaining Supply: ${(100 - info.total_supply / info.max_supply * 100).toFixed(
-        3
-      )}%
-#bitcoin`
-    )
-    .then(bitcoin => Bot.tweet(bitcoin))
-    //.then(bitcoin => console.log(bitcoin)) // debugging purposes
+   fetch('https://api.coingecko.com/api/v3/simple/price?ids=memetic&vs_currencies=usd&include_market_cap=true&include_24hr_change=true&include_24hr_vol=true')
+    .then(data => data.json())
+    .then((data) => {
+        const change24Hr = data.memetic.usd_24h_change.toFixed(2);
+        const info = 
+          `Pepecoin Price: $${data.memetic.usd.toFixed(5)} [USD]\n` +
+           `Marketcap: $${data.memetic.usd_market_cap.toFixed(2)} [USD]\n` +
+           `24hr change: ${change24Hr}% ${change24Hr < 0 ? '📉' : '📈'}\n` +
+           `$meme #meme #pepecoin 🐸`;
+        Bot.tweet(info);
+    })
     .catch(error => console.log('Error ', error));
 }
 
